@@ -219,6 +219,48 @@
   .rule { border-top: 1px solid var(--line); }
   .on-ink .rule { border-color: var(--line-on-ink); }
 
+  /* Featured services sheet: equal columns, cards share row tracks via subgrid */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 16px;
+    row-gap: 56px;
+  }
+  .featured-card {
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+  }
+  /* The link is itself a subgrid so the whole card stays one focusable, clickable target */
+  .featured-link {
+    display: grid;
+    align-items: start;
+    grid-row: 1 / -1;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+  @media (min-width: 768px) {
+    .featured-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 24px;
+      /* No row gap: parent gaps would bleed into the card subgrids' tracks.
+         Spacing between rows of cards is a margin on the next row instead. */
+      row-gap: 0;
+    }
+    .featured-card:nth-child(n + 3) { margin-top: 72px; }
+    .featured-card {
+      grid-row: span 5;
+      grid-template-rows: subgrid;
+      row-gap: 0;
+    }
+  }
+  @media (min-width: 1024px) {
+    .featured-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .featured-card:nth-child(n + 3) { margin-top: 0; }
+  }
+  @media (min-width: 1280px) {
+    .featured-grid { column-gap: 32px; }
+  }
+
   /* Buttons — three variants only */
   .btn {
     --btn-h: 52px;
