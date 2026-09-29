@@ -87,7 +87,7 @@ export function Footer() {
           <p>
             © {year} {site.name}
             {site.companyNumber ? ` · Registered in England & Wales, No. ${site.companyNumber}` : ""}
-            {" · All rights are reserved @blackwolvestech.com"}
+            {" · All rights reserved @blackwolvestech.com"}
           </p>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             <li>
