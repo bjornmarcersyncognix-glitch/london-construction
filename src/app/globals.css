@@ -1,0 +1,419 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design tokens
+   Palette is drawn from London's building materials:
+   Portland stone (ground), graphite (ink), mortar (lines),
+   London stock brick (the single accent).
+------------------------------------------------------------------- */
+:root {
+  /* Ground & surfaces */
+  --stone: #f3f1ec;          /* page background */
+  --stone-deep: #e9e5dd;     /* hover / pressed surface on stone */
+  --surface: #fbfaf7;        /* raised panels (forms, menus) */
+  --paper: #ffffff;          /* elevated surface (inputs) */
+
+  /* Ink */
+  --ink: #141619;            /* primary text, dark sections */
+  --ink-soft: #24282d;       /* ink hover */
+  --slate: #4a4f55;          /* secondary text — 7.9:1 on stone */
+  --muted: #63676d;          /* metadata — 4.9:1 on stone */
+
+  /* Lines */
+  --line: #d6d1c7;           /* hairlines, borders */
+  --line-strong: #b9b2a5;    /* input borders, emphasised dividers */
+
+  /* Accent — London stock brick */
+  --brick: #9e3f28;          /* primary CTA, active markers — 6.5:1 with white */
+  --brick-hover: #87341f;
+  --brick-active: #712a18;
+  --brick-light: #d9785c;    /* brick for text on ink — 6.0:1 */
+
+  /* On-dark tokens (graphite sections) */
+  --on-ink: #f3f1ec;
+  --on-ink-soft: #b3b6ba;    /* 8.6:1 on ink */
+  --line-on-ink: rgb(243 241 236 / 0.16);
+
+  /* Feedback */
+  --success: #2f6b4f;
+  --warning: #8a5a0b;
+  --error: #b42318;
+
+  /* Focus */
+  --focus: #9e3f28;
+
+  /* Layout */
+  --gutter: 16px;
+  --header-h: 72px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@media (min-width: 768px) {
+  :root { --gutter: 32px; --header-h: 80px; }
+}
+@media (min-width: 1280px) {
+  :root { --gutter: 56px; }
+}
+
+@theme inline {
+  --color-stone: var(--stone);
+  --color-stone-deep: var(--stone-deep);
+  --color-surface: var(--surface);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-slate: var(--slate);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-brick: var(--brick);
+  --color-brick-hover: var(--brick-hover);
+  --color-brick-active: var(--brick-active);
+  --color-brick-light: var(--brick-light);
+  --color-on-ink: var(--on-ink);
+  --color-on-ink-soft: var(--on-ink-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-xs: 2px;
+
+  --breakpoint-xs: 30rem;
+  --breakpoint-3xl: 110rem;
+}
+
+/* ------------------------------------------------------------------
+   Base
+------------------------------------------------------------------- */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+  }
+  body {
+    background: var(--stone);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection { background: var(--brick); color: #fff; }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+  .on-ink :focus-visible { outline-color: var(--on-ink); }
+
+  a { color: inherit; text-decoration: none; }
+  img, video { display: block; max-width: 100%; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+}
+
+/* ------------------------------------------------------------------
+   Typography system — one family (Archivo), width axis for display
+------------------------------------------------------------------- */
+@layer components {
+  .t-display {
+    font-size: clamp(2.75rem, 1.35rem + 5.4vw, 6.75rem);
+    line-height: 0.96;
+    font-weight: 600;
+    font-stretch: 112%;
+    letter-spacing: -0.032em;
+  }
+  .t-hero {
+    font-size: clamp(2.625rem, 1.3rem + 4.4vw, 5.75rem);
+    line-height: 0.98;
+    font-weight: 600;
+    font-stretch: 110%;
+    letter-spacing: -0.03em;
+  }
+  .t-h1 {
+    font-size: clamp(2.375rem, 1.5rem + 3.4vw, 4.5rem);
+    line-height: 1.02;
+    font-weight: 600;
+    font-stretch: 110%;
+    letter-spacing: -0.028em;
+  }
+  .t-h2 {
+    font-size: clamp(1.875rem, 1.35rem + 2.1vw, 3.25rem);
+    line-height: 1.06;
+    font-weight: 600;
+    font-stretch: 108%;
+    letter-spacing: -0.022em;
+  }
+  .t-h3 {
+    font-size: clamp(1.3125rem, 1.1rem + 0.8vw, 1.75rem);
+    line-height: 1.2;
+    font-weight: 600;
+    font-stretch: 104%;
+    letter-spacing: -0.012em;
+  }
+  .t-h4 {
+    font-size: 1.1875rem;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: -0.006em;
+  }
+  .t-lead {
+    font-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.4375rem);
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: -0.006em;
+  }
+  .t-body { font-size: 1.0625rem; line-height: 1.65; }
+  .t-small { font-size: 0.9375rem; line-height: 1.55; }
+  .t-label {
+    font-size: 0.75rem;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .t-meta {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* Container & grid */
+  .wrap {
+    width: 100%;
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: 16px;
+  }
+  @media (min-width: 768px) {
+    .grid-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+  }
+  @media (min-width: 1280px) {
+    .grid-12 { column-gap: 32px; }
+  }
+
+  .section { padding-block: 72px; }
+  @media (min-width: 768px) { .section { padding-block: 112px; } }
+  @media (min-width: 1280px) { .section { padding-block: 144px; } }
+
+  .rule { border-top: 1px solid var(--line); }
+  .on-ink .rule { border-color: var(--line-on-ink); }
+
+  /* Buttons — three variants only */
+  .btn {
+    --btn-h: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: var(--btn-h);
+    padding: 0 24px;
+    border-radius: var(--radius-xs);
+    border: 1px solid transparent;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out),
+      border-color 200ms var(--ease-out), transform 200ms var(--ease-out);
+  }
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; }
+  .btn .btn-arrow { transition: transform 300ms var(--ease-out); }
+  .btn:hover .btn-arrow { transform: translateX(3px); }
+
+  .btn-primary { background: var(--brick); color: #fff; }
+  .btn-primary:hover:not(:disabled) { background: var(--brick-hover); }
+  .btn-primary:active:not(:disabled) { background: var(--brick-active); }
+
+  .btn-secondary { border-color: var(--ink); color: var(--ink); background: transparent; }
+  .btn-secondary:hover:not(:disabled) { background: var(--ink); color: var(--on-ink); }
+  .on-ink .btn-secondary, .btn-secondary.is-inverse { border-color: rgb(243 241 236 / 0.55); color: var(--on-ink); }
+  .on-ink .btn-secondary:hover:not(:disabled), .btn-secondary.is-inverse:hover:not(:disabled) {
+    background: var(--on-ink); color: var(--ink); border-color: var(--on-ink);
+  }
+
+  .btn-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 calc(100% - 10px);
+    background-repeat: no-repeat;
+    transition: background-size 350ms var(--ease-out);
+  }
+  .btn-text:hover { background-size: 100% 1px; }
+  .btn-text .btn-arrow { transition: transform 300ms var(--ease-out); }
+  .btn-text:hover .btn-arrow { transform: translateX(3px); }
+
+  /* Navigation */
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 14px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 8px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 350ms var(--ease-out);
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-expanded="true"]::after { transform: scaleX(1); }
+  .nav-link.is-active::after { transform: scaleX(1); background: var(--brick); height: 2px; }
+
+  .mobile-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 64px;
+    border-bottom: 1px solid var(--line-on-ink);
+    font-size: 1.75rem;
+    font-weight: 600;
+    font-stretch: 108%;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    color: var(--on-ink);
+    transition: color 200ms var(--ease-out);
+  }
+  .footer-link:hover { color: var(--on-ink-soft); }
+
+  /* Inline link inside running text */
+  .link-inline {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line-strong);
+    transition: text-decoration-color 200ms var(--ease-out);
+  }
+  .link-inline:hover { text-decoration-color: currentColor; }
+
+  /* Form fields */
+  .field-label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 8px; }
+  .field {
+    width: 100%;
+    min-height: 52px;
+    padding: 14px 16px;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-xs);
+    font: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    transition: border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+  }
+  .field::placeholder { color: var(--muted); opacity: 1; }
+  .field:hover { border-color: var(--slate); }
+  .field:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+  .field:focus-visible { outline: none; }
+  .field[aria-invalid="true"] { border-color: var(--error); box-shadow: 0 0 0 1px var(--error); }
+  textarea.field { min-height: 160px; resize: vertical; line-height: 1.55; }
+  select.field {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%23141619' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 44px;
+  }
+
+  /* Image frames */
+  .frame { position: relative; overflow: hidden; background: var(--stone-deep); }
+  .frame > img { object-fit: cover; }
+  .on-ink .frame { background: #1d2024; }
+}
+
+/* ------------------------------------------------------------------
+   Motion helpers — GSAP sets inline styles; these guarantee a
+   correct static fallback when JS is off or motion is reduced.
+------------------------------------------------------------------- */
+.js-motion [data-reveal],
+.js-motion [data-reveal-stagger] > * {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, 24px, 0);
+}
+.js-motion [data-reveal-image] { clip-path: inset(100% 0% 0% 0%); }
+
+/* Failsafe: if the motion layer never initialises, show everything. */
+.js-motion:not(.motion-live) [data-reveal],
+.js-motion:not(.motion-live) [data-reveal-stagger] > *,
+.js-motion:not(.motion-live) [data-reveal-image] {
+  animation: motion-failsafe 0s 2.5s forwards;
+}
+@keyframes motion-failsafe {
+  to { opacity: 1; visibility: visible; transform: none; clip-path: inset(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hero entrance — CSS only, so it runs before hydration */
+.hero-in {
+  animation: hero-in 1.1s var(--ease-out) both;
+}
+@keyframes hero-in {
+  from { opacity: 0; transform: translate3d(0, 28px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.hero-media { animation: hero-settle 2.6s var(--ease-out) both; }
+@keyframes hero-settle {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--on-ink);
+  padding: 12px 16px;
+  font-weight: 600;
+}
+.skip-link:focus { top: 16px; }
