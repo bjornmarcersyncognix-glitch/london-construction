@@ -11,11 +11,16 @@ export function Footer() {
       <div className="wrap pb-10 pt-16 md:pt-24">
         <div className="grid-12 gap-y-12">
           <div className="col-span-4 md:col-span-12 lg:col-span-4">
-            <Link href="/" aria-label={`${site.shortName} — home`} className="inline-block">
+            <Link
+              href="/"
+              aria-label={`${site.shortName} — home`}
+              className="inline-block"
+            >
               <Logo />
             </Link>
             <p className="mt-6 max-w-sm text-on-ink-soft">
-              Residential and commercial construction, renovation and development, from our base in Ashford.
+              Residential and commercial construction, renovation and
+              development, from our base in Ashford.
             </p>
           </div>
 
@@ -62,7 +67,10 @@ export function Footer() {
                 {site.address.country}
               </p>
               <p className="mt-5">
-                <a href={site.phone.href} className="text-[1.375rem] font-semibold tabular tracking-[-0.01em] hover:text-on-ink-soft transition-colors">
+                <a
+                  href={site.phone.href}
+                  className="text-[1.375rem] font-semibold tabular tracking-[-0.01em] hover:text-on-ink-soft transition-colors"
+                >
                   {site.phone.display}
                 </a>
               </p>
@@ -74,9 +82,16 @@ export function Footer() {
                 </p>
               )}
               <p className="mt-5">
-                <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn-text text-on-ink">
+                <a
+                  href={site.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-text text-on-ink"
+                >
                   Get directions <ArrowUpRight />
-                  <span className="sr-only">(opens Google Maps in a new tab)</span>
+                  <span className="sr-only">
+                    (opens Google Maps in a new tab)
+                  </span>
                 </a>
               </p>
             </address>
@@ -86,17 +101,25 @@ export function Footer() {
         <div className="mt-16 flex flex-col gap-4 border-t border-[var(--line-on-ink)] pt-6 t-small text-on-ink-soft md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {site.name}
-            {site.companyNumber ? ` · Registered in England & Wales, No. ${site.companyNumber}` : ""}
+            {site.companyNumber
+              ? ` · Registered in England & Wales, No. ${site.companyNumber}`
+              : ""}
             {" · All rights reserved @blackwolvestech.com"}
           </p>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             <li>
-              <Link href="/privacy" className="hover:text-on-ink transition-colors">
+              <Link
+                href="/privacy"
+                className="hover:text-on-ink transition-colors"
+              >
                 Privacy
               </Link>
             </li>
             <li>
-              <Link href="/credits" className="hover:text-on-ink transition-colors">
+              <Link
+                href="/credits"
+                className="hover:text-on-ink transition-colors"
+              >
                 Image credits
               </Link>
             </li>
