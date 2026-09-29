@@ -38,11 +38,14 @@ export function Intro() {
           </div>
         </div>
 
+        {/*
+          Image pair: 7 + 5 columns sharing one height. The wide frame sets the
+          row height (16:10); the narrow frame stretches to match, so both share
+          top and bottom edges. On mobile they stack at the same 4:3 ratio.
+        */}
         <div className="grid-12 mt-16 gap-y-4 md:mt-24">
           <Frame image="london-terrace" ratio="aspect-[4/3] md:aspect-[16/10]" sizes="(min-width: 768px) 58vw, 100vw" className="col-span-4 md:col-span-7" reveal parallax={6} />
-          <div className="col-span-4 flex flex-col justify-end md:col-span-5">
-            <Frame image="brick-texture" ratio="aspect-[4/3]" sizes="(min-width: 768px) 40vw, 100vw" reveal />
-          </div>
+          <Frame image="brick-texture" ratio="aspect-[4/3] md:aspect-auto" sizes="(min-width: 768px) 40vw, 100vw" className="col-span-4 md:col-span-5" reveal parallax={6} />
         </div>
       </div>
     </section>
