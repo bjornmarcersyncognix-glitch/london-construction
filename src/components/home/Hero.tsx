@@ -2,14 +2,10 @@
 
 import { getImageProps } from "next/image";
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { heroFilm } from "@/content/media";
 import { site } from "@/content/site";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Video-led hero.
@@ -18,11 +14,16 @@ gsap.registerPlugin(ScrollTrigger);
  *   1080p landscape otherwise. The film fades in once it is playing.
  * - Reduced-motion and data-saver visitors keep the still poster.
  * - A pause control satisfies WCAG 2.2.2 for moving content.
+ * - The frame is exactly one viewport tall (svh, so mobile browser chrome
+ *   never pushes content below the fold). Type and spacing scale with
+ *   viewport height so everything fits on short laptop screens; the frame
+ *   only grows if content genuinely cannot fit (e.g. a landscape phone).
+ * - Nothing is scroll-linked: the hero scrolls away as one piece and ends
+ *   exactly where the next section begins.
  */
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const mediaRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [paused, setPaused] = useState(false);
   const [enabled, setEnabled] = useState(false);
@@ -55,25 +56,6 @@ export function Hero() {
     };
   }, []);
 
-  // Gentle scroll-away: the film drifts and the copy lifts as the hero leaves.
-  useEffect(() => {
-    if (!document.documentElement.classList.contains("js-motion")) return;
-    const ctx = gsap.context(() => {
-      gsap.to(mediaRef.current, {
-        yPercent: 14,
-        ease: "none",
-        scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "bottom top", scrub: true },
-      });
-      gsap.to("[data-hero-copy]", {
-        y: -60,
-        opacity: 0.2,
-        ease: "none",
-        scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "bottom top", scrub: true },
-      });
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
-
   const toggle = () => {
     const v = videoRef.current;
     if (!v) return;
@@ -89,8 +71,8 @@ export function Hero() {
   };
 
   return (
-    <section ref={sectionRef} className="on-ink relative flex min-h-[100svh] flex-col overflow-hidden bg-ink text-on-ink" aria-labelledby="hero-title">
-      <div ref={mediaRef} className="absolute inset-0" aria-hidden="true">
+    <section ref={sectionRef} className="hero-frame on-ink relative flex flex-col overflow-hidden bg-ink text-on-ink" aria-labelledby="hero-title">
+      <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
        <div className="absolute inset-0 hero-media">
         <HeroPoster />
         <video
@@ -110,21 +92,23 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-ink/25" aria-hidden="true" />
       <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-ink/20 to-transparent" aria-hidden="true" />
 
-      <div className="wrap relative flex flex-1 flex-col justify-end pb-10 pt-[calc(var(--header-h)+48px)] md:pb-14">
-        <div data-hero-copy className="grid-12">
+      <div className="hero-content wrap relative flex flex-1 flex-col justify-end">
+        <div className="grid-12">
           <div className="col-span-4 md:col-span-11 xl:col-span-9">
             <div className="hero-in" style={{ animationDelay: "150ms" }}>
-              <SectionLabel className="text-on-ink/80">Residential and Commercial · Ashford</SectionLabel>
+              <SectionLabel className="text-on-ink/80">
+                Residential and Commercial<span className="hidden sm:inline"> · Ashford</span>
+              </SectionLabel>
             </div>
-            <h1 id="hero-title" className="t-hero mt-6 md:mt-8 hero-in" style={{ animationDelay: "250ms" }}>
+            <h1 id="hero-title" className="t-hero hero-gap-sm hero-in" style={{ animationDelay: "250ms" }}>
               Construction and development for homes and commercial property.
             </h1>
           </div>
-          <div className="col-span-4 mt-8 md:col-span-7 md:mt-10 lg:col-span-6">
+          <div className="hero-gap-md col-span-4 md:col-span-7 lg:col-span-6">
             <p className="t-lead text-on-ink/85 hero-in" style={{ animationDelay: "400ms" }}>
               New builds, extensions, loft conversions, renovations, structural work and commercial fit-outs.
             </p>
-            <div className="mt-8 flex flex-col gap-3 xs:flex-row hero-in md:mt-10" style={{ animationDelay: "520ms" }}>
+            <div className="hero-gap-md flex flex-col gap-3 xs:flex-row hero-in" style={{ animationDelay: "520ms" }}>
               <ButtonLink href="/contact#enquiry">Request a Quote</ButtonLink>
               <ButtonLink href="/services" variant="secondary" inverse arrow={false}>
                 Explore Our Services
@@ -133,9 +117,9 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="mt-12 flex items-end justify-between gap-6 border-t border-[var(--line-on-ink)] pt-5 hero-in md:mt-16" style={{ animationDelay: "700ms" }}>
+        <div className="hero-gap-lg flex items-center justify-between gap-6 border-t border-[var(--line-on-ink)] pt-4 hero-in" style={{ animationDelay: "700ms" }}>
           <dl className="flex flex-col gap-x-12 gap-y-2 t-small sm:flex-row">
-            <div className="flex gap-3">
+            <div className="hidden gap-3 sm:flex">
               <dt className="sr-only">Address</dt>
               <dd className="text-on-ink/75">{site.address.street}, {site.address.locality} {site.address.postcode}</dd>
             </div>
